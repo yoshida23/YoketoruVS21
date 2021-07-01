@@ -99,5 +99,10 @@ namespace YoketoruVS21
                     break;
             }
         }
+
+        private void titleButton_Click(object sender, EventArgs e)
+        {
+            nextState = State.Title;
+        }
     }
 }
