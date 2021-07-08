@@ -27,10 +27,12 @@ namespace YoketoruVS21
         int[] vx = new int[ChrMax];
         int[] vy = new int[ChrMax];
         int itemCount = 0;
+        int time = 0;
 
         const int PlayerIndex = 0;
         const int EnemyIndex = PlayerMax;
         const int ItemIndex = EnemyIndex + EnemyMax;
+        const int StartTime = 100;
 
         const string PlayerText = "( ^)o(^ )";
         const string EnemyText = "◆";
@@ -142,6 +144,7 @@ namespace YoketoruVS21
                     }
 
                     itemCount = ItemMax;
+                    time = StartTime + 1;
                     break;
 
                 case State.Gameover:
@@ -160,6 +163,13 @@ namespace YoketoruVS21
 
         void UpdateGame()
         {
+            time--;
+            timeLabel.Text = $"Time{time}";
+            if(time<=0)
+            {
+                nextState = State.Gameover;
+            }
+
             Point mp = PointToClient(MousePosition);
 
             //TODO:mpがプレイヤーのラベルの中心になるように設定
@@ -169,6 +179,7 @@ namespace YoketoruVS21
 
             for (int i = EnemyIndex; i < ChrMax; i++)
             {
+                if (!chrs[i].Visible) continue;
                 chrs[i].Left += vx[i];
                 chrs[i].Top += vy[i];
 
@@ -209,6 +220,10 @@ namespace YoketoruVS21
                             nextState = State.Clear;
                         }
                         leftLabel.Text = "★:" + itemCount;
+
+                        //vx[i] = 0;
+                        //vy[i] = 0;
+                        //chrs[i].Left = 10000;
                     }
                 }
 
