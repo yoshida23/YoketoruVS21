@@ -28,6 +28,7 @@ namespace YoketoruVS21
         int[] vy = new int[ChrMax];
         int itemCount = 0;
         int time = 0;
+        int hiscore = 0;
 
         const int PlayerIndex = 0;
         const int EnemyIndex = PlayerMax;
@@ -157,6 +158,12 @@ namespace YoketoruVS21
                     //MessageBox.Show("Clear");
                     clearLabel.Visible = true;
                     titleButton.Visible = true;
+                    hiLabel.Visible = true;
+                    if(time>hiscore)
+                    {
+                        hiscore = time;
+                        hiLabel.Text = "HighScore" + hiscore;
+                    }
                     break;
             }
         }
