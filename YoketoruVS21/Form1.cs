@@ -140,6 +140,8 @@ namespace YoketoruVS21
                         vx[i] = rand.Next(-SpeedMax, SpeedMax + 1);
                         vy[i] = rand.Next(-SpeedMax, SpeedMax + 1);
                     }
+
+                    itemCount = ItemMax;
                     break;
 
                 case State.Gameover:
@@ -202,6 +204,10 @@ namespace YoketoruVS21
                     {
                         chrs[i].Visible = false;
                         itemCount--;
+                        if(itemCount<=0)
+                        {
+                            nextState = State.Clear;
+                        }
                         leftLabel.Text = "★:" + itemCount;
                     }
                 }
