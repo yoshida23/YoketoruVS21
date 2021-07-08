@@ -26,6 +26,7 @@ namespace YoketoruVS21
         Label[] chrs = new Label[ChrMax];
         int[] vx = new int[ChrMax];
         int[] vy = new int[ChrMax];
+        int itemCount = 0;
 
         const int PlayerIndex = 0;
         const int EnemyIndex = PlayerMax;
@@ -39,7 +40,7 @@ namespace YoketoruVS21
 
         enum State
         {
-            None=-1,  //無効
+            None = -1,  //無効
             Title,    //タイトル
             Game,     //ゲーム
             Gameover, //ゲームオーバー
@@ -55,15 +56,15 @@ namespace YoketoruVS21
         {
             InitializeComponent();
 
-            for (int i=0;i<ChrMax;i++)
+            for (int i = 0; i < ChrMax; i++)
             {
                 chrs[i] = new Label();
                 chrs[i].AutoSize = true;
-                if(i==PlayerIndex)
+                if (i == PlayerIndex)
                 {
                     chrs[i].Text = PlayerText;
                 }
-                else if(i<ItemIndex)
+                else if (i < ItemIndex)
                 {
                     chrs[i].Text = EnemyText;
                 }
@@ -83,25 +84,25 @@ namespace YoketoruVS21
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(isDebug)
+            if (isDebug)
             {
-                if(GetAsyncKeyState((int) Keys.O)<0)
+                if (GetAsyncKeyState((int)Keys.O) < 0)
                 {
                     nextState = State.Gameover;
                 }
-                else if (GetAsyncKeyState((int)Keys.C)<0)
+                else if (GetAsyncKeyState((int)Keys.C) < 0)
                 {
                     nextState = State.Clear;
                 }
             }
 
 
-            if(nextState != State.None)
+            if (nextState != State.None)
             {
                 initProc();
             }
 
-            if(currentState== State.Game)
+            if (currentState == State.Game)
             {
                 UpdateGame();
             }
@@ -112,9 +113,9 @@ namespace YoketoruVS21
             currentState = nextState;
             nextState = State.None;
 
-            
 
-            switch(currentState)
+
+            switch (currentState)
             {
                 case State.Title:
                     timeLabel.Visible = true;
@@ -132,7 +133,7 @@ namespace YoketoruVS21
                     copyrightLabel.Visible = false;
                     hiLabel.Visible = false;
 
-                    for(int i=EnemyIndex;i<ChrMax;i++)
+                    for (int i = EnemyIndex; i < ChrMax; i++)
                     {
                         chrs[i].Left = rand.Next(ClientSize.Width - chrs[i].Width);
                         chrs[i].Top = rand.Next(ClientSize.Height - chrs[i].Height);
@@ -164,12 +165,12 @@ namespace YoketoruVS21
             chrs[PlayerIndex].Left = mp.X - chrs[PlayerIndex].Width / 2;
             chrs[PlayerIndex].Top = mp.Y - chrs[PlayerIndex].Height / 2;
 
-            for(int i=EnemyIndex;i<ChrMax; i++)
+            for (int i = EnemyIndex; i < ChrMax; i++)
             {
                 chrs[i].Left += vx[i];
                 chrs[i].Top += vy[i];
 
-                if(chrs[i].Left<0)
+                if (chrs[i].Left < 0)
                 {
                     vx[i] = Math.Abs(vx[i]);
                 }
@@ -187,20 +188,30 @@ namespace YoketoruVS21
                 }
 
                 //当たり判定
-                if((mp.X>=chrs[i].Left)
-                    &&(mp.X<chrs[i].Right)
-                    &&(mp.Y>=chrs[i].Top)
-                    &&(mp.Y<chrs[i].Bottom))
+                if ((mp.X >= chrs[i].Left)
+                    && (mp.X < chrs[i].Right)
+                    && (mp.Y >= chrs[i].Top)
+                    && (mp.Y < chrs[i].Bottom))
+                {
+                    //MessageBox.Show("重なった!!");
+                    if (i < ItemIndex)
                     {
-                    MessageBox.Show("重なった!!");
+                        nextState = State.Gameover;
+                    }
+                    else
+                    {
+                        chrs[i].Visible = false;
+                        itemCount--;
+                        leftLabel.Text = "★:" + itemCount;
+                    }
                 }
+
             }
-
         }
 
-        private void titleButton_Click(object sender, EventArgs e)
-        {
-            nextState = State.Title;
+            private void titleButton_Click(object sender, EventArgs e)
+            {
+                nextState = State.Title;
+            }
         }
-    }
 }
