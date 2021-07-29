@@ -165,7 +165,7 @@ namespace YoketoruVS21
                     {
                         hiscore = time;
                         hiLabel.Text = "HighScore" + hiscore;
-                    }
+                       }
                     break;
             }
         }
